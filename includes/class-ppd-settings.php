@@ -46,7 +46,7 @@ if (!class_exists('PPD_Settings')) {
                     'id'   => 'ppd_text_color',
                     'css'  => 'width:6em;',
                     'default' => '#fff'
-                ),
+                ),/*
                 'product_id' => array(
                     'name' => __('Promoted Product', 'woocommerce'),
                     'type' => 'single_select_product',
@@ -54,7 +54,7 @@ if (!class_exists('PPD_Settings')) {
                     'id'   => 'ppd_product_id',
                     'css'  => 'min-width:300px;',
                     'desc_tip' => true
-                ),
+                ),*/
                 'section_end' => array(
                     'type' => 'sectionend',
                     'id' => 'wc_' . $this->id . '_section_end'
@@ -63,5 +63,27 @@ if (!class_exists('PPD_Settings')) {
 
             return apply_filters('wc_' . $this->id . '_settings', $settings);
         }
+
+        public function output_html() {
+            show_banner();
+        }
+
+        public function output() {
+            global $current_section;
+
+            $settings = $this->get_settings( $current_section );
+
+            WC_Admin_Settings::output_fields( $settings );
+
+            $this->output_html();
+        }
+
+        public function save() {
+            global $current_section;
+
+            $settings = $this->get_settings( $current_section );
+            WC_Admin_Settings::save_fields( $settings );
+        }
+    
     }
 }
