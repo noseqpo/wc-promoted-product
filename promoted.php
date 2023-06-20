@@ -59,3 +59,22 @@ if (!class_exists('Promoted_Product_Display')) {
 
 // Include the product meta class 
 require_once 'includes/class-ppd-product-meta.php';
+function show_banner() {
+    ?>
+    <div id="banner" style="width: 100%; padding: 1rem; text-align: center; background-color: navy; color: white;">
+        <p>
+            Breaking News! This is the banner for the news part of the header!
+        </p>
+    </div>
+    <?php
+}
+
+function front_page_banner() {
+	if ( is_front_page() ) {	
+		show_banner();
+	}
+}
+
+add_action( 'woocommerce_before_main_content', 'show_banner', 1 );
+add_action( 'loop_start', 'front_page_banner' );
+
