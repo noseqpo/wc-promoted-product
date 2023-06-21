@@ -28,9 +28,9 @@ if (!class_exists('PPD_Product_Meta')) {
             woocommerce_wp_text_input(array(
                 'id' => 'ppd_custom_title',
                 'label' => __('Custom Title', 'woocommerce'),
-                'description' => __('Optional', 'woocommerce'),
+                'description' => __('Optional. Enter a custom title to be shown instead of the product title.', 'woocommerce'),
                 'desc_tip' => true,
-                'placeholder' => __('Enter a custom title to be shown instead of the product title.', 'woocommerce'),
+                'placeholder' => __('Custom tittle.', 'woocommerce'),
             ));
 
             woocommerce_wp_checkbox(array(
@@ -107,5 +107,3 @@ if (!class_exists('PPD_Product_Meta')) {
     }
     new PPD_Product_Meta();
 }
-
-find_current_promoted();

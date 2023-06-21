@@ -58,7 +58,8 @@ if (!class_exists('PPD_Settings')) {
         }
 
         public function output_html() {
-            show_banner();
+            global $promoted_product_d;
+            $promoted_product_d->show_banner();
         }
 
         public function output() {
