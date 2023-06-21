@@ -8,7 +8,7 @@ if (!class_exists('PPD_Product_Meta')) {
         public function __construct() {
             add_action('woocommerce_product_options_general_product_data', array($this, 'add_fields'));
             add_action('woocommerce_process_product_meta', array($this, 'save_fields'), 10, 2);
-            add_action('admin_footer', array($this, 'toggle_fields_js'));
+            add_action('admin_enqueue_scripts', array($this,'enqueue_ppd_scripts'));
         }
 
         public function add_fields() {
@@ -69,40 +69,13 @@ if (!class_exists('PPD_Product_Meta')) {
             update_post_meta($post_id, 'ppd_set_expiry', isset($_POST['ppd_set_expiry']) ? 'yes' : 'no');
             update_post_meta($post_id, 'ppd_expiry_date', sanitize_text_field($_POST['ppd_expiry_date']));
             update_post_meta($post_id, 'ppd_hidden_date', sanitize_text_field($_POST['ppd_hidden_date']));
+            delete_transient('ppd_current_promoted');
         }
 
-        public function toggle_fields_js() {
-            ?>
-            <script type="text/javascript">
-                jQuery(document).ready(function() {
-                    jQuery("#ppd_promote").change(function() {
-                        jQuery("#ppd_promote_toggle").toggle(this.checked);
-                    }).change();
-
-                    jQuery("#ppd_set_expiry").change(function() {
-                        jQuery("#ppd_set_expiry_toggle").toggle(this.checked);
-                    }).change();
-                });
-            </script>
-            <script>
-                jQuery(document).ready(function($) {
-                    function toggleExpiryDateRequired() {
-                        var expiryDateField = $('#ppd_expiry_date');
-                        var setExpiryCheckbox = $('#ppd_set_expiry');
-
-                        if (setExpiryCheckbox.is(':checked')) {
-                            expiryDateField.prop('required', true);
-                        } else {
-                            expiryDateField.prop('required', false);
-                        }
-                    }
-                    toggleExpiryDateRequired();
-                    $('#ppd_set_expiry').on('change', toggleExpiryDateRequired);
-                });
-            </script>
-            <?php
+        public function enqueue_ppd_scripts() {
+   
+            wp_enqueue_script('main', plugins_url('../js/main.js', __FILE__), array('jquery'), '1.0', true);
         }
-
 
     }
     new PPD_Product_Meta();

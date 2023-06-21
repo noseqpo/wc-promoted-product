@@ -54,14 +54,14 @@ if (!class_exists('Promoted_Product_D')) {
         }
     
         private function display_banner($product) {
-            $background_color = get_option('ppd_background_color'); 
-            $text_color = get_option('ppd_text_color'); 
+            $background_color = esc_attr(get_option('ppd_background_color')); 
+            $text_color = esc_attr(get_option('ppd_text_color')); 
             $promoted_product_title = get_option('ppd_promoted_product_title', ''); 
             $product_id = $product->get_id();
             $custom_title = get_post_meta($product_id, 'ppd_custom_title');
-            $custom_title = $custom_title[0] == '' ? $product->get_title() : $custom_title[0];
-    
-            $link = get_permalink($product_id);
+            $custom_title = esc_html($custom_title[0] == '' ? $product->get_title() : $custom_title[0]);
+                
+            $link = esc_url(get_permalink($product_id));
             if(is_admin()){
                 $link = get_admin_url() . 'post.php?post=' . $product_id . '&action=edit';
             }
@@ -79,22 +79,29 @@ if (!class_exists('Promoted_Product_D')) {
         public function find_current_promoted() {
             global $wpdb;
             
-            $query = "
-                SELECT post_id
-                FROM {$wpdb->postmeta}
-                WHERE meta_key = 'ppd_hidden_date'
-                ORDER BY meta_value DESC
-                LIMIT 1;
-            ";
-            
-            $result = $wpdb->get_var($query);
-            
-            if ($result !== null) {
-                update_option('ppd_current', $result);
-            } else {
-                update_option('ppd_current', 0);
+            $result = get_transient('ppd_current_promoted');
+        
+            if ($result === false) {
+                $query = "
+                    SELECT post_id
+                    FROM {$wpdb->postmeta}
+                    WHERE meta_key = 'ppd_hidden_date'
+                    ORDER BY meta_value DESC
+                    LIMIT 1;
+                ";
+                
+                $result = $wpdb->get_var($query);
+                
+                set_transient('ppd_current_promoted', $result, 12 * HOUR_IN_SECONDS);
+            }
+        
+            $current = get_option('ppd_current');
+
+            if ($current !== $result) {
+                update_option('ppd_current', $result !== null ? $result : 0);
             }
         }
+        
     }
 }
 
