@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-
 if (!class_exists('Promoted_Product_D')) {
     class Promoted_Product_D {
         public function __construct() {
@@ -60,7 +59,7 @@ if (!class_exists('Promoted_Product_D')) {
             $product_id = $product->get_id();
             $custom_title = get_post_meta($product_id, 'ppd_custom_title');
             $custom_title = esc_html($custom_title[0] == '' ? $product->get_title() : $custom_title[0]);
-                
+
             $link = esc_url(get_permalink($product_id));
             if(is_admin()){
                 $link = get_admin_url() . 'post.php?post=' . $product_id . '&action=edit';
@@ -101,7 +100,6 @@ if (!class_exists('Promoted_Product_D')) {
                 update_option('ppd_current', $result !== null ? $result : 0);
             }
         }
-        
     }
 }
 
@@ -114,3 +112,10 @@ $promoted_product_d->find_current_promoted();
 add_action('woocommerce_before_main_content', array($promoted_product_d, 'show_banner'), 1);
 add_action('loop_start', array($promoted_product_d, 'front_page_banner'));
 
+add_action('woocommerce_before_cart', array($promoted_product_d, 'show_banner'), 1);
+add_action('woocommerce_before_checkout_form', array($promoted_product_d, 'show_banner'), 1);
+
+function add_line_break() {
+    echo '<br>';
+}
+add_action( 'woocommerce_before_checkout_form', 'add_line_break', 2 );

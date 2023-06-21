@@ -60,7 +60,6 @@ if (!class_exists('PPD_Product_Meta')) {
 
             echo '</div></div></div>';  // close the toggle divs
 
-
         }
 
         public function save_fields($post_id, $post) {
@@ -73,10 +72,8 @@ if (!class_exists('PPD_Product_Meta')) {
         }
 
         public function enqueue_ppd_scripts() {
-   
             wp_enqueue_script('main', plugins_url('../js/main.js', __FILE__), array('jquery'), '1.0', true);
         }
-
     }
     new PPD_Product_Meta();
 }

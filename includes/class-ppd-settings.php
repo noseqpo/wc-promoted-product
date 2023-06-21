@@ -63,21 +63,14 @@ if (!class_exists('PPD_Settings')) {
         }
 
         public function output() {
-            global $current_section;
-
-            $settings = $this->get_settings( $current_section );
-
+            $settings = $this->get_settings(  );
             WC_Admin_Settings::output_fields( $settings );
-
             $this->output_html();
         }
 
         public function save() {
-            global $current_section;
-
-            $settings = $this->get_settings( $current_section );
+            $settings = $this->get_settings(  );
             WC_Admin_Settings::save_fields( $settings );
-        }
-    
+        }   
     }
 }
