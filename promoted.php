@@ -15,6 +15,17 @@ if (!class_exists('Promoted_Product_D')) {
     class Promoted_Product_D {
         public function __construct() {
             add_filter('woocommerce_product_settings', array($this, 'add_product_settings'));
+            add_filter('woocommerce_product_settings', array($this, 'ppd_show_banner'));
+        }
+
+        /** 
+         *  Shows the banner when saved.
+         *  A visual bug may occur on some themes. Still looking for the cause. 
+         */
+        public function ppd_show_banner($settings){
+            global $promoted_product_d;
+            $promoted_product_d->show_banner();
+            return $settings;
         }
     
         public function add_product_settings($settings) {
@@ -55,9 +66,7 @@ if (!class_exists('Promoted_Product_D')) {
                     'id' => 'custom_product_settings_section_end'
                 )
             );
-            global $promoted_product_d;
-            $promoted_product_d->show_banner();
-    
+  
             return array_merge($my_settings, $settings);
         }
         
