@@ -11,6 +11,15 @@ if (!class_exists('PPD_Product_Meta')) {
             add_action('admin_enqueue_scripts', array($this,'enqueue_ppd_scripts'));
         }
 
+        /**
+         * Field for the product page.
+         *   Custom title is optional. If empty product name will be used.
+         *   Expiration date must have the exact format: YYYY-MM-DD HH:MM
+         *   
+         * jQuery for dropdown toggle and required date field.
+         *
+         * @return void
+         */
         public function add_fields() {
             echo '<div class="options_group">';
 
@@ -62,6 +71,19 @@ if (!class_exists('PPD_Product_Meta')) {
 
         }
 
+        /**
+         * Saves post_meta for a promoted post. 
+         *  'ppd_promote': bool, whenever the product is checked for promotion
+         *  'ppd_custom_title': str, if empty the product title will be used
+         *  'ppd_set_expiry': bool, whenever the promotion has an expiration date
+         *  'ppd_expiry_date': date, required date in specific format YYYY-MM-DD H:i
+         *  'ppd_hidden_date': date, saves the modification date and is used to determine the latest promotion added
+         * Deletes 'ppd_current_promoted' trancient when a new promotion is added or modified.
+         *
+         * @param int $post_id
+         * @param int $post
+         * @return void
+         */
         public function save_fields($post_id, $post) {
             update_post_meta($post_id, 'ppd_promote', isset($_POST['ppd_promote']) ? 'yes' : 'no');
             update_post_meta($post_id, 'ppd_custom_title', sanitize_text_field($_POST['ppd_custom_title']));

@@ -57,6 +57,11 @@ if (!class_exists('PPD_Settings')) {
             return apply_filters('wc_' . $this->id . '_settings', $settings);
         }
 
+        /**
+         * Display the banner on the settings page. 
+         *
+         * @return void
+         */
         public function output_html() {
             global $promoted_product_d;
             $promoted_product_d->show_banner();

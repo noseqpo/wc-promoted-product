@@ -10,11 +10,19 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
+
 if (!class_exists('Promoted_Product_D')) {
     class Promoted_Product_D {
         public function __construct() {
             add_filter('woocommerce_get_settings_pages', array($this, 'add_settings_page'), 15);
         }
+
+        /**
+         *  Gets the configurations for the page settings.
+         *
+         * @param [type] $settings
+         * @return void
+         */
 
         public function add_settings_page($settings) {
             require_once 'includes/class-ppd-settings.php';
@@ -22,6 +30,11 @@ if (!class_exists('Promoted_Product_D')) {
             return $settings;
         }
         
+        /**
+         * Calls the function that generates the HTML with the correspondet information when setted.
+         *
+         * @return void
+         */
         public function show_banner() {
             $product_id = get_option('ppd_current', 0); 
             if (!$product_id == 0) {
@@ -35,7 +48,13 @@ if (!class_exists('Promoted_Product_D')) {
         private function get_product($product_id) {
             return wc_get_product($product_id);
         }
-    
+        
+        /**
+         * Controls the expiration of a given promotion. Check if the expiration date is set, or if the promotion has expired.
+         *
+         * @param int $product_id
+         * @return boolean
+         */
         private function is_promotion_active($product_id) {
             $set_expiry = get_post_meta($product_id, 'ppd_set_expiry');
             $expiry_date = get_post_meta($product_id, 'ppd_expiry_date');
@@ -51,7 +70,13 @@ if (!class_exists('Promoted_Product_D')) {
             }
             return true;
         }
-    
+        
+        /**
+         * Retrieves the necesary information for generating the banner. Sets the correspondent link depending on current page. Sets the correspondent position with JS.
+         *
+         * @param int $product
+         * @return void
+         */
         private function display_banner($product) {
             $background_color = esc_attr(get_option('ppd_background_color')); 
             $text_color = esc_attr(get_option('ppd_text_color')); 
@@ -91,7 +116,13 @@ if (!class_exists('Promoted_Product_D')) {
             echo "<h3 style='color: {$text_color} !important;'>{$promoted_product_title} <a href='" . $link . "' style='color: {$text_color} !important;'>" . $custom_title . "</a></h3>";
             echo "</div>";
         }
-
+        
+        /**
+         * SQL search for the lasted promotion added to the database, using the 'ppd_hidden_date' meta_key. 
+         * Sets a transient option for resource saving.
+         *
+         * @return void
+         */
         public function find_current_promoted() {
             global $wpdb;
             
