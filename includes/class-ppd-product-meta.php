@@ -28,9 +28,9 @@ if (!class_exists('PPD_Product_Meta')) {
             woocommerce_wp_text_input(array(
                 'id' => 'ppd_custom_title',
                 'label' => __('Custom Title', 'woocommerce'),
-                'description' => __('Enter a custom title to be shown instead of the product title.', 'woocommerce'),
+                'description' => __('Optional', 'woocommerce'),
                 'desc_tip' => true,
-                'placeholder' => __('Optional.', 'woocommerce'),
+                'placeholder' => __('Enter a custom title to be shown instead of the product title.', 'woocommerce'),
             ));
 
             woocommerce_wp_checkbox(array(
@@ -53,7 +53,14 @@ if (!class_exists('PPD_Product_Meta')) {
                 'placeholder' => 'YYYY-MM-DD HH:MM',
             ));
 
+            woocommerce_wp_hidden_input(array(
+                'id' => 'ppd_hidden_date',
+                'value' => current_time('mysql'),  // The value is the current date and time.
+            ));            
+
             echo '</div></div></div>';  // close the toggle divs
+
+
         }
 
         public function save_fields($post_id, $post) {
@@ -61,6 +68,7 @@ if (!class_exists('PPD_Product_Meta')) {
             update_post_meta($post_id, 'ppd_custom_title', sanitize_text_field($_POST['ppd_custom_title']));
             update_post_meta($post_id, 'ppd_set_expiry', isset($_POST['ppd_set_expiry']) ? 'yes' : 'no');
             update_post_meta($post_id, 'ppd_expiry_date', sanitize_text_field($_POST['ppd_expiry_date']));
+            update_post_meta($post_id, 'ppd_hidden_date', sanitize_text_field($_POST['ppd_hidden_date']));
         }
 
         public function toggle_fields_js() {

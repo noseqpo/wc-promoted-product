@@ -47,15 +47,7 @@ if (!class_exists('PPD_Settings')) {
                     'id'   => 'ppd_text_color',
                     'css'  => 'width:6em;',
                     'default' => '#fff'
-                ),/*
-                'product_id' => array(
-                    'name' => __('Promoted Product', 'woocommerce'),
-                    'type' => 'single_select_product',
-                    'desc' => __('Choose the product to promote.', 'woocommerce'),
-                    'id'   => 'ppd_product_id',
-                    'css'  => 'min-width:300px;',
-                    'desc_tip' => true
-                ),*/
+                ),
                 'section_end' => array(
                     'type' => 'sectionend',
                     'id' => 'wc_' . $this->id . '_section_end'
