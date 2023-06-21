@@ -48,7 +48,7 @@ if (!class_exists('PPD_Product_Meta')) {
                 'id' => 'ppd_expiry_date',
                 'wrapper_class' => 'show_if_simple',
                 'label' => __('Expiration Date', 'woocommerce'),
-                'description' => __('Enter the expiration date in the format: YYYY-MM-DD HH:MM.', 'woocommerce'),
+                'description' => __('Enter the expiration date in the exact format: YYYY-MM-DD HH:MM.', 'woocommerce'),
                 'desc_tip' => true,
                 'placeholder' => 'YYYY-MM-DD HH:MM',
             ));
@@ -76,8 +76,26 @@ if (!class_exists('PPD_Product_Meta')) {
                     }).change();
                 });
             </script>
+            <script>
+                jQuery(document).ready(function($) {
+                    function toggleExpiryDateRequired() {
+                        var expiryDateField = $('#ppd_expiry_date');
+                        var setExpiryCheckbox = $('#ppd_set_expiry');
+
+                        if (setExpiryCheckbox.is(':checked')) {
+                            expiryDateField.prop('required', true);
+                        } else {
+                            expiryDateField.prop('required', false);
+                        }
+                    }
+                    toggleExpiryDateRequired();
+                    $('#ppd_set_expiry').on('change', toggleExpiryDateRequired);
+                });
+            </script>
             <?php
         }
+
+
     }
     new PPD_Product_Meta();
 }

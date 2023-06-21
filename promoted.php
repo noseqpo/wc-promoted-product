@@ -35,12 +35,9 @@ function show_banner() {
     $product_id = get_option('ppd_current'); // default to product ID 0 if not set
     $background_color = get_option('ppd_background_color'); // default to white
     $text_color = get_option('ppd_text_color'); // default to black
-    $promoted_product_title = get_option('ppd_promoted_product_title', ''); // Default blank
+    $promoted_product_title = get_option('ppd_promoted_product_title', ''); // default blank
 
     $product = wc_get_product($product_id);
-    if (!$product || !$product->is_visible()) {
-        echo "<p>" . __('No product selected.', 'woocommerce') . "</p>";
-    }
 
     $promote = get_post_meta($product_id, 'ppd_promote');
     $custom_title = get_post_meta($product_id, 'ppd_custom_title');
@@ -54,15 +51,24 @@ function show_banner() {
     }
     
     $expired = False;
-    if($set_expiry == 'yes'){
+    if($set_expiry[0] == 'yes'){
         $now = new DateTime();
-        $expiry = DateTime::createFromFormat('Y-m-d H:i', $expiry_date);
+        $expiry = DateTime::createFromFormat('Y-m-d H:i', $expiry_date[0]);
         $expired = $now > $expiry;
     }
-    $link = get_permalink($product_id);
 
+    $link = get_permalink($product_id);
     if(is_admin()){
         $link = get_admin_url() . 'post.php?post=' . $product_id . '&action=edit';
+        if (!$product || !$product->is_visible()) {
+            echo "<p>" . __('No product selected.', 'woocommerce') . "</p>";
+        }
+        if(!$expiry){
+            echo "<p>" . __('Invalid date.', 'woocommerce') . "</p>";
+        }
+        if($expired){
+            echo "<p><a href='" . $link . "'>" . __('Current promotion expired.', 'woocommerce') . "</a></p>";
+        }
     }
 
     if (!$expired) {
@@ -70,7 +76,6 @@ function show_banner() {
         echo "<h3 style='color: {$text_color} !important;'>{$promoted_product_title} <a href='" . $link . "' style='color: {$text_color} !important;'>" . $custom_title . "</a></h3>";
         echo "</div>";
     }
-
 }
 
 function front_page_banner() {
