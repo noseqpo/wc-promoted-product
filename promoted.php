@@ -64,6 +64,28 @@ if (!class_exists('Promoted_Product_D')) {
             if(is_admin()){
                 $link = get_admin_url() . 'post.php?post=' . $product_id . '&action=edit';
             }
+            ?>
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var myDiv = document.getElementById('banner-ppd');
+                var siteh = document.getElementById('site-header');
+                var masthead = document.getElementById('masthead');
+                var header = document.getElementById('header');
+            
+                if (myDiv && (siteh || masthead)) {
+                    if (siteh) {
+                        siteh.appendChild(myDiv);
+                    } else if (masthead) {
+                        masthead.appendChild(myDiv);
+                    } else if (header) {
+                        header.appendChild(myDiv);
+                    }
+                } else {
+                    console.error('Could not find one or both elements');
+                }
+            });
+            </script>
+            <?php
     
             echo "<div id='banner' style='width: 100%; padding: 1rem; text-align: center; background-color: {$background_color}; color: {$text_color};'>";
             echo "<h3 style='color: {$text_color} !important;'>{$promoted_product_title} <a href='" . $link . "' style='color: {$text_color} !important;'>" . $custom_title . "</a></h3>";
