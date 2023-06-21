@@ -128,7 +128,6 @@ if (!class_exists('Promoted_Product_D')) {
             echo "</div>";
         }
         
-        
         /**
          * SQL search for the lasted promotion added to the database, using the 'ppd_hidden_date' meta_key. 
          * Sets a transient option for resource saving.
