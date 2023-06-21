@@ -21,6 +21,7 @@ if (!class_exists('Promoted_Product_D')) {
         /** 
          *  Shows the banner when saved.
          *  A visual bug may occur on some themes. Still looking for the cause. 
+         *    Is not the wp_head hook.
          */
         public function ppd_show_banner($settings){
             global $promoted_product_d;
