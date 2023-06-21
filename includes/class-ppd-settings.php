@@ -29,7 +29,8 @@ if (!class_exists('PPD_Settings')) {
                     'desc' => __('Title for the promoted product.', 'woocommerce'),
                     'id'   => 'ppd_promoted_product_title',
                     'css'  => 'min-width:300px;',
-                    'default' => 'FLASH SALE:'
+                    'default' => '',
+                    'placeholder' => __('Tittle for banner.', 'woocommerce'),
                 ),
                 'background_color' => array(
                     'name' => __('Background Color', 'woocommerce'),
