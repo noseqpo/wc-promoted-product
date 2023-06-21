@@ -69,11 +69,6 @@ if (!class_exists('Promoted_Product_D')) {
             echo "<h3 style='color: {$text_color} !important;'>{$promoted_product_title} <a href='" . $link . "' style='color: {$text_color} !important;'>" . $custom_title . "</a></h3>";
             echo "</div>";
         }
-        public function front_page_banner() {
-            if (is_front_page()) {
-                $this->show_banner();
-            }
-        }
 
         public function find_current_promoted() {
             global $wpdb;
@@ -109,13 +104,4 @@ global $promoted_product_d;
 $promoted_product_d = new Promoted_Product_D();
 $promoted_product_d->find_current_promoted();
 
-add_action('woocommerce_before_main_content', array($promoted_product_d, 'show_banner'), 1);
-add_action('loop_start', array($promoted_product_d, 'front_page_banner'));
-
-add_action('woocommerce_before_cart', array($promoted_product_d, 'show_banner'), 1);
-add_action('woocommerce_before_checkout_form', array($promoted_product_d, 'show_banner'), 1);
-
-function add_line_break() {
-    echo '<br>';
-}
-add_action( 'woocommerce_before_checkout_form', 'add_line_break', 2 );
+add_action('wp_head', array($promoted_product_d, 'show_banner'), 1);
