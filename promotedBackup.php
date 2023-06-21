@@ -14,54 +14,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 if (!class_exists('Promoted_Product_D')) {
     class Promoted_Product_D {
         public function __construct() {
-            add_filter('woocommerce_product_settings', array($this, 'add_product_settings'));
+            add_filter('woocommerce_get_settings_pages', array($this, 'add_settings_page'), 15);
         }
-    
-        public function add_product_settings($settings) {
-            $my_settings = array(
-                'section_title' => array(
-                    'name'     => __('Promoted Product Settings', 'woocommerce'),
-                    'type'     => 'title',
-                    'desc'     => '',
-                    'id'       => 'wc_ppd_section_title'
-                ),
-                'promoted_product_title' => array(
-                    'name' => __('Title', 'woocommerce'),
-                    'type' => 'text',
-                    'desc' => __('Title for the promoted product.', 'woocommerce'),
-                    'id'   => 'ppd_promoted_product_title',
-                    'css'  => 'min-width:300px;',
-                    'default' => '',
-                    'placeholder' => __('Tittle for banner.', 'woocommerce'),
-                ),
-                'background_color' => array(
-                    'name' => __('Background Color', 'woocommerce'),
-                    'type' => 'color',
-                    'desc' => __('Choose the background color for the promoted product display.', 'woocommerce'),
-                    'id'   => 'ppd_background_color',
-                    'css'  => 'width:6em;',
-                    'default' => '#f00'
-                ),
-                'text_color' => array(
-                    'name' => __('Text Color', 'woocommerce'),
-                    'type' => 'color',
-                    'desc' => __('Choose the text color for the promoted product display.', 'woocommerce'),
-                    'id'   => 'ppd_text_color',
-                    'css'  => 'width:6em;',
-                    'default' => '#fff'
-                ),
-                array(
-                    'type' => 'title',
-                    'id'   => 'show_banner',
-                    'callback' => array($this, 'show_banner')
-                ),
-                array(
-                    'type' => 'sectionend',
-                    'id' => 'custom_product_settings_section_end'
-                )
-            );
-    
-            return array_merge($settings, $my_settings);
+
+        /**
+         *  Gets the configurations for the page settings.
+         *
+         * @param [type] $settings
+         * @return void
+         */
+
+        public function add_settings_page($settings) {
+            require_once 'includes/class-ppd-settings.php';
+            $settings[] = new PPD_Settings();
+            return $settings;
         }
         
         /**
@@ -124,27 +90,27 @@ if (!class_exists('Promoted_Product_D')) {
                 $link = get_admin_url() . 'post.php?post=' . $product_id . '&action=edit';
             }
             ?>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var myDiv = document.getElementById('banner-ppd');
-    var siteh = document.getElementById('site-header');
-    var masthead = document.getElementById('masthead');
-    var header = document.getElementById('header');
-
-    if (myDiv && (siteh || masthead)) {
-        if (siteh) {
-            siteh.appendChild(myDiv);
-        } else if (masthead) {
-            masthead.appendChild(myDiv);
-        } else if (header) {
-            header.appendChild(myDiv);
-        }
-    } else {
-        console.error('Could not find one or both elements');
-    }
-});
-</script>
-<?php
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var myDiv = document.getElementById('banner-ppd');
+                var siteh = document.getElementById('site-header');
+                var masthead = document.getElementById('masthead');
+                var header = document.getElementById('header');
+            
+                if (myDiv && (siteh || masthead)) {
+                    if (siteh) {
+                        siteh.appendChild(myDiv);
+                    } else if (masthead) {
+                        masthead.appendChild(myDiv);
+                    } else if (header) {
+                        header.appendChild(myDiv);
+                    }
+                } else {
+                    console.error('Could not find one or both elements');
+                }
+            });
+            </script>
+            <?php
     
             echo "<div id='banner-ppd' style='width: 100%; padding: 1rem; text-align: center; background-color: {$background_color}; color: {$text_color};'>";
             echo "<h3 style='color: {$text_color} !important;'>{$promoted_product_title} <a href='" . $link . "' style='color: {$text_color} !important;'>" . $custom_title . "</a></h3>";
