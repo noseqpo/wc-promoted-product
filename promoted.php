@@ -51,17 +51,14 @@ if (!class_exists('Promoted_Product_D')) {
                     'default' => '#fff'
                 ),
                 array(
-                    'type' => 'title',
-                    'id'   => 'show_banner',
-                    'callback' => array($this, 'show_banner')
-                ),
-                array(
                     'type' => 'sectionend',
                     'id' => 'custom_product_settings_section_end'
                 )
             );
+            global $promoted_product_d;
+            $promoted_product_d->show_banner();
     
-            return array_merge($settings, $my_settings);
+            return array_merge($my_settings, $settings);
         }
         
         /**
@@ -118,38 +115,19 @@ if (!class_exists('Promoted_Product_D')) {
             $product_id = $product->get_id();
             $custom_title = get_post_meta($product_id, 'ppd_custom_title');
             $custom_title = esc_html($custom_title[0] == '' ? $product->get_title() : $custom_title[0]);
-
+        
             $link = esc_url(get_permalink($product_id));
             if(is_admin()){
                 $link = get_admin_url() . 'post.php?post=' . $product_id . '&action=edit';
             }
-            ?>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var myDiv = document.getElementById('banner-ppd');
-    var siteh = document.getElementById('site-header');
-    var masthead = document.getElementById('masthead');
-    var header = document.getElementById('header');
-
-    if (myDiv && (siteh || masthead)) {
-        if (siteh) {
-            siteh.appendChild(myDiv);
-        } else if (masthead) {
-            masthead.appendChild(myDiv);
-        } else if (header) {
-            header.appendChild(myDiv);
-        }
-    } else {
-        console.error('Could not find one or both elements');
-    }
-});
-</script>
-<?php
-    
+            
+            wp_enqueue_script('banner-script', plugins_url('/js/positions.js', __FILE__), array(), '1.0.0', true);
+        
             echo "<div id='banner-ppd' style='width: 100%; padding: 1rem; text-align: center; background-color: {$background_color}; color: {$text_color};'>";
             echo "<h3 style='color: {$text_color} !important;'>{$promoted_product_title} <a href='" . $link . "' style='color: {$text_color} !important;'>" . $custom_title . "</a></h3>";
             echo "</div>";
         }
+        
         
         /**
          * SQL search for the lasted promotion added to the database, using the 'ppd_hidden_date' meta_key. 
