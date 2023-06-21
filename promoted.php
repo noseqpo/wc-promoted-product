@@ -87,7 +87,7 @@ if (!class_exists('Promoted_Product_D')) {
             </script>
             <?php
     
-            echo "<div id='banner' style='width: 100%; padding: 1rem; text-align: center; background-color: {$background_color}; color: {$text_color};'>";
+            echo "<div id='banner-ppd' style='width: 100%; padding: 1rem; text-align: center; background-color: {$background_color}; color: {$text_color};'>";
             echo "<h3 style='color: {$text_color} !important;'>{$promoted_product_title} <a href='" . $link . "' style='color: {$text_color} !important;'>" . $custom_title . "</a></h3>";
             echo "</div>";
         }
